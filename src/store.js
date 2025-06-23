@@ -4,5 +4,6 @@ import cartReducer from './CartSlice';
     reducer: {
         cart: cartReducer,
     },
+    devTools: process.env.NODE_ENV !== 'production'
 });
 export default store

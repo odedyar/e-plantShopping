@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeItem, updateQuantity } from './CartSlice';
+import { ctn } from './helpers/helpes';
 import './CartItem.css';
 
 const CartItem = ({ onContinueShopping }) => {
@@ -9,27 +10,49 @@ const CartItem = ({ onContinueShopping }) => {
 
   // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
- 
+    return cart.reduce((total, item) => total + (item.cost * item.quantity), 0).toFixed(2);
   };
 
   const handleContinueShopping = (e) => {
-   
+    e.preventDefault();
+    onContinueShopping(); // Call the function passed as a prop to continue shopping
   };
 
-
-
   const handleIncrement = (item) => {
+    const updatedItem = { ...item, quantity: item.quantity + 1 };
+    dispatch(updateQuantity(updatedItem));
+    // Optionally, you can also update the local state if needed
+    // setCart(cart.map(cartItem => cartItem.name === item.name ? updatedItem : cartItem));
   };
 
   const handleDecrement = (item) => {
+    if (item.quantity > 1) {
+      const updatedItem = { ...item, quantity: item.quantity - 1 };
+      dispatch(updateQuantity(updatedItem));
+      // Optionally, you can also update the local state if needed
+      // setCart(cart.map(cartItem => cartItem.name === item.name ? updatedItem : cartItem));
+    } else {
+      // If quantity is 1, remove the item from the cart
+      dispatch(removeItem(item));
+    }
    
   };
 
   const handleRemove = (item) => {
+    dispatch(removeItem(item));
+    // Optionally, you can also update the local state if needed
+    // setCart(cart.filter(cartItem => cartItem.name !== item.name));
   };
 
   // Calculate total cost based on quantity for an item
-  const calculateTotalCost = (item) => {
+  const calculateTotalCost = (item) => {  
+    console.log("Calculating total cost for item:", item);
+    if (!item || !item.cost || !item.quantity) return '0.00';
+    return (ctn(item.cost) * item.quantity).toFixed(2);
+  };
+
+  const handleCheckoutShopping = (e) => {
+    alert('Functionality to be added for future reference');
   };
 
   return (
@@ -57,7 +80,7 @@ const CartItem = ({ onContinueShopping }) => {
       <div className="continue_shopping_btn">
         <button className="get-started-button" onClick={(e) => handleContinueShopping(e)}>Continue Shopping</button>
         <br />
-        <button className="get-started-button1">Checkout</button>
+        <button className="get-started-button1" onClick={(e) => handleCheckoutShopping(e)}>Checkout</button>
       </div>
     </div>
   );
