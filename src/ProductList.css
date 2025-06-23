@@ -4,6 +4,10 @@ body, h1, ul {
     padding: 0;
 }
 
+h1 div {
+    text-align: center;
+}
+
 /* Set a background color */
 body {
     font-family: Arial, sans-serif;
